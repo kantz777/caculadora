@@ -1,0 +1,178 @@
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Operacao {
+    double numero1;
+    double numero2;
+    char operador;
+    double resultado;
+
+    public Operacao(double numero1, double numero2, char operador, double resultado) {
+        this.numero1 = numero1;
+        this.numero2 = numero2;
+        this.operador = operador;
+        this.resultado = resultado;
+    }
+
+    @Override
+    public String toString() {
+        return numero1 + " " + operador + " " + numero2 + " = " + resultado;
+    }
+}
+
+public class Main {
+    static Scanner scanner = new Scanner(System.in);
+    static ArrayList<Operacao> operacoes = new ArrayList<>();
+
+    public static void main(String[] args) {
+        int opcao;
+
+        do {
+            System.out.println("\n=== Menu da Calculadora (CRUD) ===");
+            System.out.println("1. Criar nova operação (Create)");
+            System.out.println("2. Listar operações (Read)");
+            System.out.println("3. Atualizar operação (Update)");
+            System.out.println("4. Remover operação (Delete)");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    criarOperacao();
+                    break;
+                case 2:
+                    listarOperacoes();
+                    break;
+                case 3:
+                    atualizarOperacao();
+                    break;
+                case 4:
+                    removerOperacao();
+                    break;
+                case 0:
+                    System.out.println("Encerrando...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+
+        } while (opcao != 0);
+
+        scanner.close();
+    }
+
+    // CREATE
+    private static void criarOperacao() {
+        System.out.print("Digite o primeiro número: ");
+        double n1 = scanner.nextDouble();
+        System.out.print("Digite o operador (+, -, *, /): ");
+        char op = scanner.next().charAt(0);
+        System.out.print("Digite o segundo número: ");
+        double n2 = scanner.nextDouble();
+
+        double resultado;
+
+        switch (op) {
+            case '+':
+                resultado = n1 + n2;
+                break;
+            case '-':
+                resultado = n1 - n2;
+                break;
+            case '*':
+                resultado = n1 * n2;
+                break;
+            case '/':
+                if (n2 == 0) {
+                    System.out.println("Erro: divisão por zero!");
+                    return;
+                }
+                resultado = n1 / n2;
+                break;
+            default:
+                System.out.println("Operador inválido!");
+                return;
+        }
+
+        operacoes.add(new Operacao(n1, n2, op, resultado));
+        System.out.println("Operação salva com sucesso.");
+    }
+
+    // READ
+    private static void listarOperacoes() {
+        if (operacoes.isEmpty()) {
+            System.out.println("Nenhuma operação registrada.");
+            return;
+        }
+
+        System.out.println("\n--- Histórico de Operações ---");
+        for (int i = 0; i < operacoes.size(); i++) {
+            System.out.println("[" + i + "] " + operacoes.get(i));
+        }
+    }
+
+    // UPDATE
+    private static void atualizarOperacao() {
+        listarOperacoes();
+        if (operacoes.isEmpty()) return;
+
+        System.out.print("Digite o índice da operação a atualizar: ");
+        int index = scanner.nextInt();
+        if (index < 0 || index >= operacoes.size()) {
+            System.out.println("Índice inválido.");
+            return;
+        }
+
+        System.out.print("Novo primeiro número: ");
+        double n1 = scanner.nextDouble();
+        System.out.print("Novo operador (+, -, *, /): ");
+        char op = scanner.next().charAt(0);
+        System.out.print("Novo segundo número: ");
+        double n2 = scanner.nextDouble();
+
+        double resultado;
+
+        switch (op) {
+            case '+':
+                resultado = n1 + n2;
+                break;
+            case '-':
+                resultado = n1 - n2;
+                break;
+            case '*':
+                resultado = n1 * n2;
+                break;
+            case '/':
+                if (n2 == 0) {
+                    System.out.println("Erro: divisão por zero!");
+                    return;
+                }
+                resultado = n1 / n2;
+                break;
+            default:
+                System.out.println("Operador inválido!");
+                return;
+        }
+
+        operacoes.set(index, new Operacao(n1, n2, op, resultado));
+        System.out.println("Operação atualizada com sucesso.");
+    }
+
+    // DELETE
+    private static void removerOperacao() {
+        listarOperacoes();
+        if (operacoes.isEmpty()) return;
+
+        System.out.print("Digite o índice da operação a remover: ");
+        int index = scanner.nextInt();
+        if (index < 0 || index >= operacoes.size()) {
+            System.out.println("Índice inválido.");
+            return;
+        }
+
+        operacoes.remove(index);
+        System.out.println("Operação removida com sucesso.");
+    }
+}
